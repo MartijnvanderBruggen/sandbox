@@ -3,6 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\User;
+use App\Company;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -18,7 +19,9 @@ use Illuminate\Support\Str;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    $company_ids = Company::all()->pluck('id');
     return [
+        'company_id' => $faker->randomElement($company_ids),
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
