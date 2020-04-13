@@ -15,4 +15,9 @@ class Company extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+    
+    public function cities()
+    {
+        return $this->belongsToMany(City::class);
+    }
 }

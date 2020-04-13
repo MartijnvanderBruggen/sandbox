@@ -10,7 +10,7 @@
                     <select v-on:change="showUsersCompanyBranch($event)" v-model="branchName">
                         <option v-for="branch in branches" :branch="branch">{{ branch }}</option>
                     </select>
-                    <select>
+                    <select v-on:change="showUsersCompanyBranch($event)" v-model="companyName">
                         <option v-for="company in companies" :company="company">{{ company }}</option>
                     </select>
                 </form>
@@ -50,6 +50,7 @@
                 users : [],
                 companies : [],
                 branchName: '',
+                companyName : '',
             }
         },
         mounted() {
@@ -124,7 +125,8 @@
                 
                 axios.get('/usersBelongsToBranch', {
                     params: {
-                      name: this.branchName
+                      branchName: this.branchName,
+                      companyName : this.companyName
                     }
                 })
                 .then(function (response) {

@@ -1957,7 +1957,8 @@ __webpack_require__.r(__webpack_exports__);
       branches: [],
       users: [],
       companies: [],
-      branchName: ''
+      branchName: '',
+      companyName: ''
     };
   },
   mounted: function mounted() {
@@ -2019,7 +2020,8 @@ __webpack_require__.r(__webpack_exports__);
       self = this;
       axios.get('/usersBelongsToBranch', {
         params: {
-          name: this.branchName
+          branchName: this.branchName,
+          companyName: this.companyName
         }
       }).then(function (response) {
         // handle success
@@ -37736,6 +37738,36 @@ var render = function() {
           _vm._v(" "),
           _c(
             "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.companyName,
+                  expression: "companyName"
+                }
+              ],
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.companyName = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.showUsersCompanyBranch($event)
+                  }
+                ]
+              }
+            },
             _vm._l(_vm.companies, function(company) {
               return _c("option", { attrs: { company: company } }, [
                 _vm._v(_vm._s(company))

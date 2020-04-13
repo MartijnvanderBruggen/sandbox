@@ -46,19 +46,28 @@ Route::get('companies', function() {
 });
 Route::get('usersBelongsToBranch', function(Request $request) {
     
-    $users = [];
-    $branches = Branch::with('companies.users')->where('name','LIKE', '%'.$request->name.'%')->get();
-    foreach($branches as $branch){
-        foreach($branch->companies as $company){
-            foreach($company->users as $user) {
-                $users[] = $user->name;
-            }
-        }
+    
+    $cr = $request->companyName;
+    $br = $request->branchName;
+    $data = [];
+    $users = User::with(['company.branch','company'])
+            ->whereHas('company', function($q) use($cr) {                
+                $q->where('name', '=',$cr);
+            })
+            ->whereHas('company.branch',function($q) use($br){
+                $q->where('name','=',$br);
+            })
+            
+            ->get();
+
+
+    foreach($users as $user){
+        $data[] = $user->name;        
     }
     
     
 //$users = User::whereHas('company.branch', function($q) use($search){ $q->where('name','=','%'.$search.'%');})->pluck('name');
-    return response()->json($users);
+    return response()->json($data);
 });
 
 Auth::routes();
