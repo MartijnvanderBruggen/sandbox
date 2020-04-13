@@ -1958,7 +1958,8 @@ __webpack_require__.r(__webpack_exports__);
       users: [],
       companies: [],
       branchName: '',
-      companyName: ''
+      companyName: '',
+      cityName: ''
     };
   },
   mounted: function mounted() {
@@ -2021,7 +2022,8 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/usersBelongsToBranch', {
         params: {
           branchName: this.branchName,
-          companyName: this.companyName
+          companyName: this.companyName,
+          cityName: this.cityName
         }
       }).then(function (response) {
         // handle success
@@ -37688,6 +37690,36 @@ var render = function() {
         _c("form", [
           _c(
             "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.cityName,
+                  expression: "cityName"
+                }
+              ],
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.cityName = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  },
+                  function($event) {
+                    return _vm.showUsersCompanyBranch($event)
+                  }
+                ]
+              }
+            },
             _vm._l(_vm.cities, function(city) {
               return _c("option", { attrs: { city: city } }, [
                 _vm._v(_vm._s(city))

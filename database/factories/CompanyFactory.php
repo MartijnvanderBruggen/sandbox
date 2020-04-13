@@ -27,3 +27,6 @@ $factory->define(Company::class, function (Faker $faker) {
         
     ];
 });
+$factory->afterCreating(App\Company::class, function ($row, Faker $faker) {
+    $row->cities()->sync(rand(1,4));
+});

@@ -49,13 +49,24 @@ Route::get('usersBelongsToBranch', function(Request $request) {
     
     $cr = $request->companyName;
     $br = $request->branchName;
+    $cn = $request->cityName;
     $data = [];
     $users = User::with(['company.branch','company'])
             ->whereHas('company', function($q) use($cr) {                
-                $q->where('name', '=',$cr);
+                $q->when($cr, function ($q, $cr) {
+                    return $q->where('name', $cr);
+                });
             })
             ->whereHas('company.branch',function($q) use($br){
-                $q->where('name','=',$br);
+                $q->when($br, function ($q, $br) {
+                    return $q->where('name', $br);
+                });
+            })
+            ->whereHas('company.cities',function($q) use($cn){
+                $q->when($cn, function ($q, $cn) {
+                    return $q->where('name', $cn);
+                });
+                
             })
             
             ->get();
