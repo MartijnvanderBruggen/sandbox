@@ -12,7 +12,7 @@ use function GuzzleHttp\json_decode;
 $factory->define(City::class, function (Faker $faker) {
     $cities = [];
     
-    $company_ids = Company::all()->pluck('id');
+    
     $tmp = json_decode(Storage::get('data/cities.json'));
     foreach($tmp as $city)
     {
@@ -21,4 +21,8 @@ $factory->define(City::class, function (Faker $faker) {
     return [
         'name' => $faker->randomElement($cities),        
     ];
+});
+
+$factory->afterCreating(App\City::class, function ($row, $faker) {
+    $row->companies()->sync(rand(1,20));
 });
